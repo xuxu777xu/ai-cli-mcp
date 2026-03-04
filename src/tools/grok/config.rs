@@ -1,7 +1,7 @@
 use std::sync::Mutex;
 use std::sync::OnceLock;
 
-const DEFAULT_MODEL: &str = "grok-4-fast";
+const DEFAULT_MODEL: &str = "grok-4.20-beta";
 
 static CONFIG: OnceLock<Mutex<Config>> = OnceLock::new();
 
@@ -146,7 +146,7 @@ mod tests {
 
     #[test]
     fn test_default_model() {
-        assert_eq!(DEFAULT_MODEL, "grok-4-fast");
+        assert_eq!(DEFAULT_MODEL, "grok-4.20-beta");
     }
 
     #[test]

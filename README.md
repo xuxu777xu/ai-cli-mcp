@@ -115,12 +115,14 @@
 | `platform` | 否 | string | — | 聚焦特定平台（如 `"Twitter"`、`"GitHub"`、`"Reddit"`） |
 | `min_results` | 否 | int | 3 | 最少返回结果数 |
 | `max_results` | 否 | int | 10 | 最多返回结果数 |
+| `model` | 否 | string | — | 覆盖 Grok 模型。回退到 `GROK_MODEL` 环境变量或默认值 `grok-4.20-beta` |
 
 ### `web_fetch` — 抓取网页内容
 
 | 参数 | 必填 | 类型 | 默认值 | 描述 |
 |------|------|------|--------|------|
 | `url` | **是** | string | — | 有效的 HTTP/HTTPS 网址 |
+| `model` | 否 | string | — | 覆盖 Grok 模型。回退到 `GROK_MODEL` 环境变量或默认值 `grok-4.20-beta` |
 
 ### `get_config_info` — 显示 Grok 配置
 
@@ -235,7 +237,7 @@ cargo build --release
 |------|------|------|
 | `GROK_API_URL` | **是** | Grok API 端点（如 `https://api.x.ai/v1`） |
 | `GROK_API_KEY` | **是** | Grok API 密钥 |
-| `GROK_MODEL` | 否 | 覆盖默认模型（默认：`grok-4-fast`） |
+| `GROK_MODEL` | 否 | 覆盖默认模型（默认：`grok-4.20-beta`） |
 | `GROK_DEBUG` | 否 | 启用调试日志（`true`/`false`） |
 | `GROK_RETRY_MAX_ATTEMPTS` | 否 | 最大重试次数（默认：3） |
 | `GROK_RETRY_MULTIPLIER` | 否 | 退避乘数（默认：1.0） |

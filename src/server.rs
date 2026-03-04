@@ -210,6 +210,9 @@ pub struct WebSearchArgs {
     /// Maximum number of results to return
     #[serde(default = "default_max_results")]
     pub max_results: i32,
+    /// The Grok model to use for this search. If not specified, uses GROK_MODEL environment variable or defaults to grok-4.20-beta.
+    #[serde(default)]
+    pub model: Option<String>,
 }
 
 /// Input parameters for web_fetch tool
@@ -217,6 +220,9 @@ pub struct WebSearchArgs {
 pub struct WebFetchArgs {
     /// A valid HTTP/HTTPS web address pointing to the target page
     pub url: String,
+    /// The Grok model to use for this fetch. If not specified, uses GROK_MODEL environment variable or defaults to grok-4.20-beta.
+    #[serde(default)]
+    pub model: Option<String>,
 }
 
 // ---------------------------------------------------------------------------
@@ -793,7 +799,7 @@ impl UnifiedServer {
 
         let platform = args.platform.unwrap_or_default();
 
-        match grok::tools::web_search(&args.query, &platform, args.min_results, args.max_results)
+        match grok::tools::web_search(&args.query, &platform, args.min_results, args.max_results, args.model)
             .await
         {
             Ok(result) => Ok(CallToolResult::success(vec![Content::text(result)])),
@@ -827,7 +833,7 @@ impl UnifiedServer {
             ));
         }
 
-        match grok::tools::web_fetch(&args.url).await {
+        match grok::tools::web_fetch(&args.url, args.model).await {
             Ok(result) => Ok(CallToolResult::success(vec![Content::text(result)])),
             Err(e) => Err(McpError::internal_error(
                 format!("Web fetch failed: {}", e),

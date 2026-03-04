@@ -712,7 +712,7 @@ dependencies = [
 
 [[package]]
 name = "ikuncode-aimcp"
-version = "0.1.1"
+version = "0.1.4"
 dependencies = [
  "anyhow",
  "base64",

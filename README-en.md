@@ -86,12 +86,14 @@ Unified AI MCP Server — a single Rust binary that combines [Gemini CLI](https:
 | `platform` | No | string | — | Focus on a specific platform (e.g., `"Twitter"`, `"GitHub"`, `"Reddit"`) |
 | `min_results` | No | int | 3 | Minimum number of results to return |
 | `max_results` | No | int | 10 | Maximum number of results to return |
+| `model` | No | string | — | Override Grok model. Falls back to `GROK_MODEL` env var or default `grok-4.20-beta` |
 
 ### `web_fetch` — Fetch Web Content
 
 | Parameter | Required | Type | Default | Description |
 |-----------|----------|------|---------|-------------|
 | `url` | **Yes** | string | — | A valid HTTP/HTTPS web address |
+| `model` | No | string | — | Override Grok model. Falls back to `GROK_MODEL` env var or default `grok-4.20-beta` |
 
 ### `get_config_info` — Show Grok Configuration
 
@@ -181,11 +183,14 @@ Install the CLI tools you want to use:
 |----------|----------|-------------|
 | `GROK_API_URL` | **Yes** | Grok API endpoint (e.g., `https://api.x.ai/v1`) |
 | `GROK_API_KEY` | **Yes** | Grok API key |
-| `GROK_MODEL` | No | Override default model (default: `grok-4-fast`) |
+| `GROK_MODEL` | No | Override default model (default: `grok-4.20-beta`) |
 | `GROK_DEBUG` | No | Enable debug logging (`true`/`false`) |
 | `GROK_RETRY_MAX_ATTEMPTS` | No | Max retry attempts (default: 3) |
 | `GROK_RETRY_MULTIPLIER` | No | Backoff multiplier (default: 1.0) |
 | `GROK_RETRY_MAX_WAIT` | No | Max retry wait in seconds (default: 10) |
+| `GROK_STREAM_TIMEOUT` | No | Single SSE stream response timeout in seconds (default: 180) |
+| `GROK_TOTAL_TIMEOUT` | No | Overall operation timeout including retries in seconds (default: 300) |
+| `GROK_IDLE_TIMEOUT` | No | Max idle time between chunks in seconds (default: 30) |
 
 ## MCP Client Configuration
 

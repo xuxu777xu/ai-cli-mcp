@@ -9,16 +9,19 @@ pub async fn web_search(
     platform: &str,
     min_results: i32,
     max_results: i32,
+    model_override: Option<String>,
 ) -> Result<String> {
     let api_url =
         Config::grok_api_url().map_err(|e| anyhow::anyhow!("Configuration error: {}", e))?;
     let api_key =
         Config::grok_api_key().map_err(|e| anyhow::anyhow!("Configuration error: {}", e))?;
-    let model = {
-        let cfg = Config::global();
-        let mut cfg = cfg.lock().unwrap();
-        cfg.grok_model()
-    };
+    let model = model_override
+        .filter(|m| !m.trim().is_empty())
+        .unwrap_or_else(|| {
+            let cfg = Config::global();
+            let mut cfg = cfg.lock().unwrap();
+            cfg.grok_model()
+        });
 
     let provider = GrokSearchProvider::new(api_url, api_key, model);
 
@@ -32,16 +35,18 @@ pub async fn web_search(
 }
 
 /// Fetch and extract content from a URL via the Grok API
-pub async fn web_fetch(url: &str) -> Result<String> {
+pub async fn web_fetch(url: &str, model_override: Option<String>) -> Result<String> {
     let api_url =
         Config::grok_api_url().map_err(|e| anyhow::anyhow!("Configuration error: {}", e))?;
     let api_key =
         Config::grok_api_key().map_err(|e| anyhow::anyhow!("Configuration error: {}", e))?;
-    let model = {
-        let cfg = Config::global();
-        let mut cfg = cfg.lock().unwrap();
-        cfg.grok_model()
-    };
+    let model = model_override
+        .filter(|m| !m.trim().is_empty())
+        .unwrap_or_else(|| {
+            let cfg = Config::global();
+            let mut cfg = cfg.lock().unwrap();
+            cfg.grok_model()
+        });
 
     let provider = GrokSearchProvider::new(api_url, api_key, model);
 
@@ -95,7 +100,7 @@ mod tests {
         std::env::remove_var("GROK_API_KEY");
 
         let rt = tokio::runtime::Runtime::new().unwrap();
-        let result = rt.block_on(web_search("test", "", 3, 10));
+        let result = rt.block_on(web_search("test", "", 3, 10, None));
         assert!(result.is_err());
         let err = result.unwrap_err().to_string();
         assert!(err.contains("Configuration error"));
@@ -107,7 +112,7 @@ mod tests {
         std::env::remove_var("GROK_API_KEY");
 
         let rt = tokio::runtime::Runtime::new().unwrap();
-        let result = rt.block_on(web_fetch("https://example.com"));
+        let result = rt.block_on(web_fetch("https://example.com", None));
         assert!(result.is_err());
         let err = result.unwrap_err().to_string();
         assert!(err.contains("Configuration error"));

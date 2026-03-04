@@ -704,10 +704,10 @@ mod tests {
         let provider = GrokSearchProvider::new(
             "https://api.x.ai/v1".to_string(),
             "test-key".to_string(),
-            "grok-4-fast".to_string(),
+            "grok-4.20-beta".to_string(),
         );
         assert_eq!(provider.api_url, "https://api.x.ai/v1");
         assert_eq!(provider.api_key, "test-key");
-        assert_eq!(provider.model, "grok-4-fast");
+        assert_eq!(provider.model, "grok-4.20-beta");
     }
 }
